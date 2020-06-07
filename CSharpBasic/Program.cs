@@ -18,15 +18,36 @@ namespace CSharpBasic
             //IQueryableWithMixed();
             //JoinUsingQuerySyntax();
             //JoinUsingMethodSyntax();
-            LinqGroupBy();
+            //LinqGroupBy();
+            LinqDistinct();
 
             Console.ReadKey();
+        }
+
+        public static void LinqDistinct()
+        {
+            List<int> intCollection = new List<int>()
+            {
+                1,2,3,2,3,4,4,5,6,3,4,5
+            };
+            //Using Method Syntax
+            var MS = intCollection.Distinct();
+
+            //Using Query Syntax
+            var QS = (from num in intCollection
+                      select num).Distinct();
+
+            foreach (var item in MS)
+            {
+                Console.WriteLine(item);
+            }
         }
 
         public static void LinqGroupBy()
         {
             //Using Method Syntax
             var GroupByMS = Student2.GetStudents().GroupBy(s => s.Barnch);
+
             //Using Query Syntax
             IEnumerable<IGrouping<string, Student2>> GroupByQS = (from std in Student2.GetStudents()
                                                                  group std by std.Barnch);
