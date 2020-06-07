@@ -10,7 +10,8 @@ namespace CSharpBasic
     {
         static void Main(string[] args)
         {
-            bool IsEqual = ClsCalculator.AreEqual(10, 20);
+            //bool IsEqual = ClsCalculator.AreEqual(10, 20);
+            bool IsEqual = ClsCalculator.AreEqual("ABC", "ABC");
             if (IsEqual)
             {
                 Console.WriteLine("Both are Equal");
@@ -24,7 +25,7 @@ namespace CSharpBasic
     }
     public class ClsCalculator
     {
-        public static bool AreEqual(int value1, int value2)
+        public static bool AreEqual(object value1, object value2)
         {
             return value1 == value2;
         }
