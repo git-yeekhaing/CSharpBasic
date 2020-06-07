@@ -13,11 +13,69 @@ namespace CSharpBasic
     {
         static void Main(string[] args)
         {
-            IEnumerabelWithQuery();
-            IEnumerabelWithMixed();
-            IQueryableWithMixed();
+            //IEnumerabelWithQuery();
+            //IEnumerabelWithMixed();
+            //IQueryableWithMixed();
+            //JoinUsingQuerySyntax();
+            //JoinUsingMethodSyntax();
+            LinqGroupBy();
 
             Console.ReadKey();
+        }
+
+        public static void LinqGroupBy()
+        {
+            //Using Method Syntax
+            var GroupByMS = Student2.GetStudents().GroupBy(s => s.Barnch);
+            //Using Query Syntax
+            IEnumerable<IGrouping<string, Student2>> GroupByQS = (from std in Student2.GetStudents()
+                                                                 group std by std.Barnch);
+            //It will iterate through each groups
+            foreach (var group in GroupByMS)
+            {
+                Console.WriteLine(group.Key + " : " + group.Count());
+                //Iterate through each student of a group
+                foreach (var student in group)
+                {
+                    Console.WriteLine("  Name :" + student.Name + ", Age: " + student.Age + ", Gender :" + student.Gender);
+                }
+            }
+
+        }
+
+        public static void JoinUsingMethodSyntax()
+        {
+            var JoinUsingMS = Employee.GetAllEmployees()
+                .Join(Address.GetAllAddresses(),
+                emp => emp.AddressId,
+                addr => addr.ID,
+                (emp, addr) => new
+                {
+                    EmployeeName = emp.Name,
+                    AddressLine = addr.AddressLine
+                }).ToList();
+
+            foreach (var employee in JoinUsingMS)
+            {
+                Console.WriteLine($"Name :{employee.EmployeeName}, Address : {employee.AddressLine}");
+            }
+        }
+
+        public static void JoinUsingQuerySyntax()
+        {
+            var JoinUsingQS = (from emp in Employee.GetAllEmployees()
+                               join address in Address.GetAllAddresses()
+                               on emp.AddressId equals address.ID
+                               select new
+                               {
+                                   EmployeeName = emp.Name,
+                                   AddressLine = address.AddressLine
+                               }).ToList();
+
+            foreach (var employee in JoinUsingQS)
+            {
+                Console.WriteLine($"Name :{employee.EmployeeName}, Address : {employee.AddressLine}");
+            }
         }
 
         public static void IQueryableWithMixed()
@@ -84,5 +142,70 @@ namespace CSharpBasic
         public int ID { get; set; }
         public string Name { get; set; }
         public string Gender { get; set; }
+    }
+
+    public class Employee
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int AddressId { get; set; }
+        public static List<Employee> GetAllEmployees()
+        {
+            return new List<Employee>()
+            {
+                new Employee { ID = 1, Name = "Preety", AddressId = 1 },
+                new Employee { ID = 2, Name = "Priyanka", AddressId = 2 },
+                new Employee { ID = 3, Name = "Anurag", AddressId = 3 },
+                new Employee { ID = 4, Name = "Pranaya", AddressId = 4 },
+                new Employee { ID = 5, Name = "Hina", AddressId = 5 },
+                new Employee { ID = 6, Name = "Sambit", AddressId = 6 },
+                new Employee { ID = 7, Name = "Happy", AddressId = 7},
+                new Employee { ID = 8, Name = "Tarun", AddressId = 8 },
+                new Employee { ID = 9, Name = "Santosh", AddressId = 9 },
+                new Employee { ID = 10, Name = "Raja", AddressId = 10},
+                new Employee { ID = 11, Name = "Sudhanshu", AddressId = 11}
+            };
+        }
+    }
+    public class Address
+    {
+        public int ID { get; set; }
+        public string AddressLine { get; set; }
+        public static List<Address> GetAllAddresses()
+        {
+            return new List<Address>()
+            {
+                new Address { ID = 1, AddressLine = "AddressLine1"},
+                new Address { ID = 2, AddressLine = "AddressLine2"},
+                new Address { ID = 3, AddressLine = "AddressLine3"},
+                new Address { ID = 4, AddressLine = "AddressLine4"},
+                new Address { ID = 5, AddressLine = "AddressLine5"},
+                new Address { ID = 9, AddressLine = "AddressLine9"},
+                new Address { ID = 10, AddressLine = "AddressLine10"},
+                new Address { ID = 11, AddressLine = "AddressLine11"},
+            };
+        }
+    }
+
+
+    public class Student2
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Gender { get; set; }
+        public string Barnch { get; set; }
+        public int Age { get; set; }
+        public static List<Student2> GetStudents()
+        {
+            return new List<Student2>()
+            {
+                new Student2 { ID = 1001, Name = "Preety", Gender = "Female", Barnch = "CSE", Age = 20 },
+                new Student2 { ID = 1002, Name = "Snurag", Gender = "Male", Barnch = "ETC", Age = 21  },
+                new Student2 { ID = 1003, Name = "Pranaya", Gender = "Male", Barnch = "CSE", Age = 21  },
+                new Student2 { ID = 1004, Name = "Anurag", Gender = "Male", Barnch = "CSE", Age = 20  },
+                new Student2 { ID = 1005, Name = "Hina", Gender = "Female", Barnch = "ETC", Age = 20 },
+                new Student2 { ID = 1006, Name = "Priyanka", Gender = "Female", Barnch = "CSE", Age = 21 }            
+            };
+        }
     }
 }
