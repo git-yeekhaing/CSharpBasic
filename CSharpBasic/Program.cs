@@ -13,14 +13,13 @@ namespace CSharpBasic
 
         static void Main(string[] args)
         {
-            GreetingsDelegate obj = new GreetingsDelegate(Greetings);
+            GreetingsDelegate obj = delegate (string name)
+            {
+                return "Hello @" + name + " welcome to Dotnet Tutorials";
+            };
             string GreetingsMessage = obj.Invoke("Pranaya");
             Console.WriteLine(GreetingsMessage);
             Console.ReadKey();
-        }
-        public static string Greetings(string name)
-        {
-            return "Hello @" + name + " welcome to Dotnet Tutorials";
         }
     }    
 }
